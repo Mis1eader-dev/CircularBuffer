@@ -26,7 +26,7 @@ bool CircularBuffer<T,S,IT>::unshift(T value) {
 	if (head == buffer) {
 		head = buffer + capacity;
 	}
-	*--head = std::move(value);
+	*(--head) = std::move(value);
 	if (count == capacity) {
 		if (tail-- == buffer) {
 			tail = buffer + capacity - 1;
