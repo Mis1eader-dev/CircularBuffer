@@ -100,14 +100,24 @@ public:
 	 *
 	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
-	T shift();
+	T&& shift();
+
+	/**
+	 * @brief Removes an element from the beginning of the buffer.
+	 */
+	void shiftNoReturn();
 
 	/**
 	 * @brief Removes an element from the end of the buffer.
 	 *
 	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
-	T pop();
+	T&& pop();
+
+	/**
+	 * @brief Removes an element from the end of the buffer.
+	 */
+	void popNoReturn();
 
 	/**
 	 * @brief Returns the element at the beginning of the buffer.
