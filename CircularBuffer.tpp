@@ -26,7 +26,7 @@ bool CircularBuffer<T,S,IT>::unshift(T value) {
 	if (head == buffer) {
 		head = buffer + capacity;
 	}
-	*--head = value;
+	*--head = std::move(value);
 	if (count == capacity) {
 		if (tail-- == buffer) {
 			tail = buffer + capacity - 1;
@@ -45,7 +45,7 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 	if (++tail == buffer + capacity) {
 		tail = buffer;
 	}
-	*tail = value;
+	*tail = std::move(value);
 	if (count == capacity) {
 		if (++head == buffer + capacity) {
 			head = buffer;
@@ -62,37 +62,33 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::shift() {
 	if (count == 0) return *head;
-	T result = *head++;
+	T&& result = std::move(*(head++));
 	if (head >= buffer + capacity) {
 		head = buffer;
 	}
 	count--;
-	return result;
+	return std::move(result);
 }
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::pop() {
 	if (count == 0) return *tail;
-	T result = *tail--;
+	T&& result = std::move(*(tail--));
 	if (tail < buffer) {
 		tail = buffer + capacity - 1;
 	}
 	count--;
-	return result;
+	return std::move(result);
 }
 
 template<typename T, size_t S, typename IT>
-T inline CircularBuffer<T,S,IT>::first() const {
-	return *head;
+T& CircularBuffer<T,S,IT>::operator [](IT index) {
+	if (index >= count) return *tail;
+	return *(buffer + ((head - buffer + index) % capacity));
 }
 
 template<typename T, size_t S, typename IT>
-T inline CircularBuffer<T,S,IT>::last() const {
-	return *tail;
-}
-
-template<typename T, size_t S, typename IT>
-T CircularBuffer<T,S,IT>::operator [](IT index) const {
+const T& CircularBuffer<T,S,IT>::operator [](IT index) const {
 	if (index >= count) return *tail;
 	return *(buffer + ((head - buffer + index) % capacity));
 }

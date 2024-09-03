@@ -114,14 +114,40 @@ public:
 	 *
 	 * @return The element at the beginning of the buffer.
 	 */
-	T inline first() const;
+	T& first()
+	{
+		return *head;
+	}
+
+	/**
+	 * @brief Returns the element at the beginning of the buffer.
+	 *
+	 * @return The element at the beginning of the buffer.
+	 */
+	const T& first() const
+	{
+		return *head;
+	}
 
 	/**
 	 * @brief Returns the element at the end of the buffer.
 	 *
 	 * @return The element at the end of the buffer.
 	 */
-	T inline last() const;
+	T& last()
+	{
+		return *tail;
+	}
+
+	/**
+	 * @brief Returns the element at the end of the buffer.
+	 *
+	 * @return The element at the end of the buffer.
+	 */
+	const T& last() const
+	{
+		return *tail;
+	}
 
 	/**
 	 * @brief Array-like access to buffer.
@@ -130,7 +156,16 @@ public:
 	 *
 	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
-	T operator [] (IT index) const;
+	T& operator [] (IT index);
+
+	/**
+	 * @brief Array-like access to buffer.
+	 *
+	 * Calling this operation using and index value greater than `size - 1` returns the tail element.
+	 *
+	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
+	 */
+	const T& operator [] (IT index) const;
 
 	/**
 	 * @brief Returns how many elements are actually stored in the buffer.
